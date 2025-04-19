@@ -13,6 +13,14 @@ namespace ECommerce.Api.Mapping
                  .ReverseMap();
 
             CreateMap<Photo, PhotoDto>().ReverseMap();
+
+            CreateMap<AddProductDto,Product>()
+                .ForMember(a=>a.Photos,op=>op.Ignore())
+                .ReverseMap();
+
+            CreateMap<UpdateProductDto, Product>()
+                .ForMember(a => a.Photos, op => op.Ignore())
+                .ReverseMap();
         }
     }
 }

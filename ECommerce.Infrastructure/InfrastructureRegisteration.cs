@@ -1,9 +1,13 @@
 ﻿using ECommerce.Core.Interfaces;
+using ECommerce.Core.Services;
 using ECommerce.Infrastructure.Data;
 using ECommerce.Infrastructure.Repositories;
+using ECommerce.Infrastructure.Repositories.Service;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +22,11 @@ namespace ECommerce.Infrastructure
         {
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitofWork, UnitofWork>();
+
+
+            services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
+
+            services.AddSingleton<IImageManagementService, ImageManagementService>();
 
             services.AddDbContext<AppDbContext>(op =>
             {

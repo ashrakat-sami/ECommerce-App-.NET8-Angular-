@@ -4,6 +4,7 @@ using ECommerce.Core.DTOs;
 using ECommerce.Core.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.InteropServices;
 
 namespace ECommerce.Api.Controllers
 {
@@ -20,9 +21,11 @@ namespace ECommerce.Api.Controllers
             try
             {
                 var products=await work.ProductRepository.GetAllAsync(x=>x.Category,x=>x.Photos);
-                if(products == null) return BadRequest(new ApiResponse(400));
-                var productsToReturn = mapper.Map<List<ProductDto>>(products);
-                return Ok(productsToReturn);
+
+               var result = mapper.Map<List<ProductDto>>(products);
+
+                if (products == null) return BadRequest(new ApiResponse(400));
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -30,5 +33,75 @@ namespace ECommerce.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("GetById/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var product = await work.ProductRepository.GetByIdAsync(id, x => x.Category, x => x.Photos); 
+                var result=mapper.Map<ProductDto>(product);
+                if(result == null) return BadRequest(new ApiResponse(400));
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost("AddProduct")]
+        public async Task<IActionResult> Add(AddProductDto productDto)
+        {
+            try
+            {
+
+               await work.ProductRepository.AddAsync(productDto);
+                return Ok(new ApiResponse(200));
+
+               
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ApiResponse(400, ex.Message));
+            }
+        }
+        [HttpPut("UpdateProduct")]
+        public async Task<IActionResult> Update(UpdateProductDto updateProductDto)
+        {
+            try
+            {
+                await work.ProductRepository.UpdateAsync(updateProductDto);
+                return Ok(new ApiResponse(200));
+
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new ApiResponse(400, ex.Message));
+            }
+        }
+
+        [HttpDelete("DeleteProduct/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var product = await work.ProductRepository.GetByIdAsync(id, x => x.Photos, x => x.Category);
+                await work.ProductRepository.DeleteAsync(product);
+
+                return Ok(new ApiResponse(200));
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new ApiResponse(400, ex.Message));
+
+            }
+        }
+
+        
+
+
     }
 }

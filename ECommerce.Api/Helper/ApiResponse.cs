@@ -18,6 +18,7 @@
                 200 => "Done",
                 400 => "The server could not understand the request due to invalid syntax.",
                 401 => "The client must authenticate itself to get the requested response.",
+                404 => "Not found resources.",
                 500 => "The server has encountered a situation it doesn't know how to handle.",
                 _ => "null",
             };
