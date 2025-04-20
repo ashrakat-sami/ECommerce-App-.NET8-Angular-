@@ -1,3 +1,4 @@
+using ECommerce.Api.Middleware;
 using ECommerce.Infrastructure;
 
 namespace ECommerce.Api
@@ -11,7 +12,7 @@ namespace ECommerce.Api
 
 
             // Add services to the container.
-
+            builder.Services.AddMemoryCache();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -36,6 +37,9 @@ namespace ECommerce.Api
                 app.UseSwaggerUI();
             }
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
+
+            app.UseMiddleware<ExceptionsMiddleware>();
+
             app.UseCors(txt);
             app.UseHttpsRedirection();
            
