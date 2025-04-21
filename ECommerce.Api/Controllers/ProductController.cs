@@ -2,6 +2,7 @@
 using ECommerce.Api.Helper;
 using ECommerce.Core.DTOs;
 using ECommerce.Core.Interfaces;
+using ECommerce.Core.Sharing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.InteropServices;
@@ -16,16 +17,16 @@ namespace ECommerce.Api.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] ProductParam productParam)
         {
             try
             {
-                var products=await work.ProductRepository.GetAllAsync(x=>x.Category,x=>x.Photos);
+                var products=await work.ProductRepository
+                    .GetAllAsync(productParam);
 
-               var result = mapper.Map<List<ProductDto>>(products);
+                var totalCount = await work.ProductRepository.CountAsync();
 
-                if (products == null) return BadRequest(new ApiResponse(400));
-                return Ok(result);
+                return Ok(new Pagination<ProductDto>(productParam.PageNumber,productParam.PageSize,totalCount,products));
             }
             catch (Exception ex)
             {
