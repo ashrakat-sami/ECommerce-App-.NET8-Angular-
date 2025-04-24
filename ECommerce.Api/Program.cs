@@ -25,7 +25,8 @@ namespace ECommerce.Api
                 options.AddPolicy(txt,
                 builder =>
                 {
-                    builder.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:4200/");
+                    builder.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:4200");
+
                 });
             });
             var app = builder.Build();
