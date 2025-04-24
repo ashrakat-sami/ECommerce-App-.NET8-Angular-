@@ -30,6 +30,8 @@ namespace ECommerce.Infrastructure
                 return ConnectionMultiplexer.Connect(configurations);
             });
 
+            //Register IOrder Service
+            services.AddScoped<IOrderService, OrderService>();
 
             services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
 

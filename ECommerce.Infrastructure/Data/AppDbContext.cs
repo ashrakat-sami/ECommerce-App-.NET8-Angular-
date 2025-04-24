@@ -1,4 +1,5 @@
-﻿using ECommerce.Core.Entities.Product;
+﻿using ECommerce.Core.Entities.Order;
+using ECommerce.Core.Entities.Product;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,10 @@ namespace ECommerce.Infrastructure.Data
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Photo> Photos { get; set; }
+        public virtual DbSet<Orders> Orders { get; set; }
+        public virtual DbSet<OrderItem> OrderItems { get; set; }
+
+        public virtual DbSet<DeliveryMethod> DeliveryMethods { get; set; }
 
 
         protected override void  OnModelCreating(ModelBuilder modelBuilder)
