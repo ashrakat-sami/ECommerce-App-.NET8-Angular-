@@ -7,12 +7,10 @@ using System.Threading.Tasks;
 namespace ECommerce.Core.Interfaces
 {
    public interface IUnitofWork
-    {
+   {
         public ICategoryRepository CategoryRepository { get; }
         public IProductRepository ProductRepository { get; }
         public IPhotoRepository PhotoRepository { get; }
-
-
-        
-    }
+        public ICustomerCartRepository CustomerCart { get; }
+   }
 }

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +21,14 @@ namespace ECommerce.Infrastructure
         public static IServiceCollection InfrastructureConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            // apply unit of work pattern
             services.AddScoped<IUnitofWork, UnitofWork>();
+            // apply redis connection
+            services.AddSingleton<IConnectionMultiplexer>(i =>
+            {
+                var configurations = ConfigurationOptions.Parse(configuration.GetConnectionString("redis"));
+                return ConnectionMultiplexer.Connect(configurations);
+            });
 
 
             services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));

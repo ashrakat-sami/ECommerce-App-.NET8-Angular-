@@ -2,6 +2,7 @@
 using ECommerce.Core.Interfaces;
 using ECommerce.Core.Services;
 using ECommerce.Infrastructure.Data;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,25 +13,28 @@ namespace ECommerce.Infrastructure.Repositories
 {
    public class UnitofWork: IUnitofWork
     {
-        private readonly AppDbContext context;
-        private readonly IMapper mapper;
-        private IImageManagementService imageManagementService;
+        private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
+        private IImageManagementService _imageManagementService;
 
         public ICategoryRepository CategoryRepository { get; }
         public IProductRepository ProductRepository { get; }
         public IPhotoRepository PhotoRepository { get; }
-        public UnitofWork(AppDbContext context, IMapper mapper, IImageManagementService imageManagementService)
+
+        public ICustomerCartRepository CustomerCart { get;}
+
+        public UnitofWork(AppDbContext context, IMapper mapper, IImageManagementService imageManagementService,
+            IConnectionMultiplexer redis)
+            
         {
-            this.context = context;
-            this.mapper = mapper;
-            this.imageManagementService = imageManagementService;
-            CategoryRepository = new CategoryRepository(context);
-            PhotoRepository = new PhotoRepository(context);
-
-
-            ProductRepository = new ProductRepository(context, mapper, imageManagementService);
+            _context = context;
+            _mapper = mapper;
+            _imageManagementService = imageManagementService;
+             
+            CategoryRepository = new CategoryRepository(_context);
+            PhotoRepository = new PhotoRepository(_context);
+            ProductRepository = new ProductRepository(_context, _mapper, _imageManagementService);
+            CustomerCart = new CustomerCartRepository(redis);
         }
-
-
     }
 }

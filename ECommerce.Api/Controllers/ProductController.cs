@@ -16,7 +16,7 @@ namespace ECommerce.Api.Controllers
         {
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet()]
         public async Task<IActionResult> GetAll([FromQuery] ProductParam productParam)
         {
             try
