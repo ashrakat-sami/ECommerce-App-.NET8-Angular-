@@ -21,9 +21,11 @@ namespace ECommerce.Api
             builder.Services.AddSwaggerGen();
             builder.Services.InfrastructureConfiguration(builder.Configuration);
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             // Email Settings for email service
             builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
             builder.Services.AddTransient<IEmailService, EmailService>();
+
 
             builder.Services.AddCors(options =>
             {
@@ -49,8 +51,10 @@ namespace ECommerce.Api
             app.UseAuthorization();
             app.UseCors(txt);
             app.UseHttpsRedirection();
-           
-            
+
+
+            app.UseAuthorization();
+
 
 
             app.MapControllers();
