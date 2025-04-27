@@ -22,7 +22,7 @@ namespace ECommerce.Api.Controllers
         public async Task<IActionResult> Create(OrderDto orderDto)
         {
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
-            var order = await _service.CreateOrdersAsync(orderDto, /*email =*/ "test@email.com");
+            var order = await _service.CreateOrdersAsync(orderDto, email );
            // if (order == null) return BadRequest("Problem creating order");
             return Ok(order);
         }

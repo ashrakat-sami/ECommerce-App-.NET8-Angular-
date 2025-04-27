@@ -25,7 +25,7 @@ namespace ECommerce.Infrastructure.Repositories.Service
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<Orders> CreateOrdersAsync(OrderDto orderDto, string BuyerEmail="test@email.com")
+        public async Task<Orders> CreateOrdersAsync(OrderDto orderDto, string BuyerEmail)
         {
             var basket =await _unitOfWork.CustomerCart.GetCartAsync(orderDto.BasketId);
             List<OrderItem> orderItems = new List<OrderItem>();
