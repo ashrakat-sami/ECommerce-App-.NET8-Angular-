@@ -1,5 +1,11 @@
+
 ﻿using ECommerce.Core.Entities.Order;
 using ECommerce.Core.Entities.Product;
+
+﻿using ECommerce.Core.Entities;
+using ECommerce.Core.Entities.Product;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Infrastructure.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -19,11 +25,13 @@ namespace ECommerce.Infrastructure.Data
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Photo> Photos { get; set; }
+
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<OrderItem> OrderItems { get; set; }
 
         public virtual DbSet<DeliveryMethod> DeliveryMethods { get; set; }
 
+        public virtual DbSet<Address> Addresses { get; set; }
 
         protected override void  OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,5 +1,7 @@
 using ECommerce.Api.Middleware;
+using ECommerce.Core.Services;
 using ECommerce.Infrastructure;
+using ECommerce.Infrastructure.Repositories.Service;
 
 namespace ECommerce.Api
 {
@@ -20,12 +22,18 @@ namespace ECommerce.Api
             builder.Services.InfrastructureConfiguration(builder.Configuration);
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+            // Email Settings for email service
+            builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+            builder.Services.AddTransient<IEmailService, EmailService>();
+
+
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy(txt,
                 builder =>
                 {
-                    builder.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:4200/");
+                    builder.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:4200");
+
                 });
             });
             var app = builder.Build();
@@ -39,11 +47,14 @@ namespace ECommerce.Api
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
             app.UseMiddleware<ExceptionsMiddleware>();
-
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseCors(txt);
             app.UseHttpsRedirection();
 
+
             app.UseAuthorization();
+
 
 
             app.MapControllers();
